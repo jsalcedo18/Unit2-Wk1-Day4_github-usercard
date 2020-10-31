@@ -209,7 +209,44 @@ const grabTheData = (id) => (event) => {
 }
 theButton.addEventListener('click', grabTheData(1)) //(1) is the id
 
+//Iterating over server data:
+
+const URL = 'https://api.thedogapi.com/v1/breeds?limit=4&page=0'
+const container = document.querySelector('.container') //referencing a div
+
+const DogCard = ({name, temperament, ...rest}) => { //build a card out of data   //look at the data thru the web browser network ("all is selected")
+//create Element
+const card = document.createElement('section')
+const h2 = document.createElement('h2')
+const p = document.createElement('p')
+//Give it Text
+h2.textContent = name
+p.textContent = temperament
+//.appendChild it to the page
+card.appendChild(h2)
+card.appendChild(p)
+//make all this information accessable
+return card;
+}
+
+  const fetchBreeds = (event) => {
+    console.log('about to fetch data!')
+    axios.get(URL) //where the information is coming from
+      .then(res => { //if the connection is sucessful, run the function in here
+        res.data.forEach(breed => { //if its successful, run the data thru a forEach
+          const card = DogCard(breed) //when variable "card" is used, run the function of DogCard
+          container.appendChild(card) //card is invoked so forth, run DogCard and create it to the page, inside of the container thats on the document (line 215)
+        })
+      })
+      .catch(err => { //if the connection hit an error, show up the debugger
+        debugger //is a breakpoint
+      })
+  }
+
+theButton.addEventListener('click', fetchBreeds)
+
 //---------------------------------------------------------------------------------------
+// Guided Practice Notes:
 // Imports at the top of the file!
 // We never nest imports inside blocks of code!
 // no import if used script tag!
